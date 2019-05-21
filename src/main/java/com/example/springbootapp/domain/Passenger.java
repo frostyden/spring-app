@@ -1,15 +1,16 @@
 package com.example.springbootapp.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Passenger {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    List<Trip> trips;
 
     private String passengerName;
     private String getPassengerSurname;

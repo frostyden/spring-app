@@ -1,42 +1,53 @@
 package com.example.springbootapp.controllers;
 
 import com.example.springbootapp.domain.Trip;
-import com.example.springbootapp.services.TripService;
+import com.example.springbootapp.repositories.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class TripController {
 
     @Autowired
-    private TripService tripService;
+    TripRepository tripRepository;
 
-    @GetMapping(value = "/trips")
-    public List<Trip> getAllTrips() {
-        return tripService.getAllTrips();
+    public TripController(TripRepository tripRepository) {
+        this.tripRepository = tripRepository;
     }
 
-    @GetMapping(value = "/trips/{id}")
-    public Trip getTrip(@PathVariable Integer id) {
+    @Nullable
+    @GetMapping(value = "/trips")
+    public Iterable<Trip> getAllTrips() {
 
-        return tripService.getTrip(id);
+        return tripRepository.findAll();
+    }
+
+    @Nullable
+    @GetMapping(value = "/trips/{id}")
+    public Optional<Trip> getTrip(@PathVariable Integer id) {
+
+        return tripRepository.findById(id);
     }
 
     @PostMapping(value = "/trips")
     public void addTrip(@RequestBody Trip trip) {
 
-        tripService.addTrip(trip);
+        tripRepository.save(trip);
     }
-    // Edit below functions
+    // Edit below function
     @PutMapping(value = "/trips/{id}")
     public void updateTrip(@RequestBody Trip trip, @PathVariable Integer id) {
-        tripService.updateTrip(trip, id);
+
+        tripRepository.save(trip);
     }
 
     @DeleteMapping(value = "/trips/{id}")
     public void deleteTrip(@PathVariable Integer id) {
-        tripService.deleteTrip(id);
+
+        tripRepository.deleteById(id);
     }
 }
